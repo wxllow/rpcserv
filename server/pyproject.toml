@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "rcpserv_server"
+version = "1.0.0"
+description = ""
+authors = ["wxllow <willow@wxllow.dev>", "BennoCrafter"]
+license = "MIT"
+readme = "../README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+flask = "^2.3.2"
+flask-socketio = "^5.3.4"
+eventlet = "^0.33.3"
+pymongo = "^4.4.0"
+gevent = "^22.10.2"
+flask-limiter = {extras = ["mongodb"], version = "^3.3.1"}
+python-dotenv = "^1.0.0"
+requests = "^2.31.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

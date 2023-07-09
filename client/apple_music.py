@@ -1,0 +1,90 @@
+import time
+import aiohttp
+import requests.utils
+
+CACHED_APPLE_MUSIC_INFO = {
+    "title": None,
+    "artist": None,
+    "album": None,
+    "url": None,
+    "image": None,
+}
+
+
+def parse_time(time: str) -> int:
+    """Parse a time string into seconds."""
+    # Time is either formatted as `0` (seconds) or `0:00` (minutes:seconds) and should be returned in seconds as an integer.
+    if ":" in time:
+        minutes, seconds = time.split(":")
+        return int(minutes) * 60 + int(seconds)
+
+    return int(time)
+
+
+async def get_apple_music_info(title, artist, album):
+    def encode_uri(text):
+        return requests.utils.quote(text, safe="")
+
+    req_param = encode_uri(f"{title} {artist} {album}")
+
+    async with aiohttp.ClientSession() as session:
+        async with await session.get(
+            f"https://itunes.apple.com/search?term={req_param}&entity=musicTrack&limit=1",
+        ) as response:
+            if response.status == 200:
+                # For some reason, itunes returns mimetype as javascript, but its still valid JSON
+                data = await response.json(content_type=None)
+
+            if data["resultCount"] > 0:
+                return {
+                    "url": data["results"][0]["trackViewUrl"],
+                    "image": data["results"][0]["artworkUrl100"].replace(
+                        "100x100bb", "512x512bb"
+                    ),
+                }
+
+    return {
+        "url": None,
+        "image": None,
+    }
+
+
+async def rpcserv(data):
+    global CACHED_APPLE_MUSIC_INFO
+
+    # Check if cache has same title, artist, and album
+    if (
+        CACHED_APPLE_MUSIC_INFO["title"] == data["metadata"]["title"]
+        and CACHED_APPLE_MUSIC_INFO["artist"] == data["metadata"]["artist"]
+        and CACHED_APPLE_MUSIC_INFO["album"] == data["metadata"]["album"]
+    ):
+        # Use cached info
+        apple_music_info = CACHED_APPLE_MUSIC_INFO
+    else:
+        print("New song, getting Apple Music info")
+        apple_music_info = await get_apple_music_info(
+            data["metadata"]["title"],
+            data["metadata"]["artist"],
+            data["metadata"]["album"],
+        )
+        # Update cache
+        CACHED_APPLE_MUSIC_INFO = {
+            "title": data["metadata"]["title"],
+            "artist": data["metadata"]["artist"],
+            "album": data["metadata"]["album"],
+            "url": apple_music_info["url"],
+            "image": apple_music_info["image"],
+        }
+
+    return {
+        "buttons": [
+            {
+                "label": "Listen on Apple Music",
+                "url": apple_music_info["url"],
+            }
+        ]
+        if apple_music_info["url"]
+        else None,
+        "large_image": apple_music_info["image"],
+        "start": time.time() - parse_time(data["metadata"]["current_time"]),
+    }
