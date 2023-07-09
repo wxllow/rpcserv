@@ -1,3 +1,4 @@
+# Designed for Apple Music, in reality, should work with any music
 import time
 import aiohttp
 import requests.utils
@@ -61,7 +62,7 @@ async def rpcserv(data):
         # Use cached info
         apple_music_info = CACHED_APPLE_MUSIC_INFO
     else:
-        print("New song, getting Apple Music info")
+        print("New song, getting iTunes info")
         apple_music_info = await get_apple_music_info(
             data["metadata"]["title"],
             data["metadata"]["artist"],

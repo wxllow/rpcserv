@@ -71,9 +71,13 @@ async def thread_async(secret):
         await sio.connect(f"{SERVER}/?secret={secret}", transports=["websocket"])
         await sio.wait()
     except socketio.exceptions.ConnectionError:
-        print("ERROR: Could not connect to server. Is it running and is the secret correct?")
+        print(
+            "ERROR: Could not connect to server. Is it running and is the secret correct?"
+        )
+        config["startup_prompt"] = True
+        save_config(config)
         sys.exit(1)
-            
+
 
 def thread_func(secret):
     asyncio.set_event_loop(loop)
@@ -83,13 +87,25 @@ def thread_func(secret):
 def main():
     global config
 
-    secret = simpledialog.askstring(
-        "Secret", "What is your secret?", initialvalue=SECRET
-    ).strip()
+    secret = SECRET
 
-    if secret:
-        config["secret"] = secret
-        save_config(config)
+    # Prompt for secret if not set or if an error occured last time
+    if (not config.get("secret")) or config.get("startup_prompt"):
+        runAgain = True
+
+        while runAgain:
+            runAgain = False
+
+            secret = simpledialog.askstring(
+                "Secret", "What is your secret?", initialvalue=SECRET
+            ).strip()
+
+            if secret:
+                config["secret"] = secret
+                config["startup_prompt"] = False
+                save_config(config)
+            else:
+                runAgain = True
 
     # Make a white square image
     image = Image.new("RGB", (64, 64), (255, 255, 255))
