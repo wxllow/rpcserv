@@ -6,6 +6,8 @@ It was made for use in a mobile Apple Music Discord Rich Presence shortcut, but 
 
 Also BIG CREDITS to [BennoCrafter](https://github.com/BennoCrafter) who also worked on this project!
 
+If you wanna use this with the Apple Music shortcut for iOS, it is located at `bin/Shortcut.shorcut` in the repository.
+
 ## Client Instructions
 
 ### Installation
