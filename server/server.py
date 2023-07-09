@@ -149,7 +149,6 @@ def status_update():
     clear = data.get("clear")
     details = data.get("details")
     state = data.get("state")
-    metadata = data.get("metadata")
 
     if not secret or not (clear or (details and state)):
         print("ERROR: Missing body parameters")
@@ -175,8 +174,11 @@ def status_update():
         {
             "details": details,
             "state": state,
+            "start": data.get("start"),
+            "buttons": data.get("buttons"),
+            "large_image": data.get("large_image"),
             "service": data.get("service"),
-            "metadata": metadata,
+            "metadata": data.get("metadata"),
         },
         room=user["_id"],
     )

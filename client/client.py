@@ -9,7 +9,7 @@ from PIL import Image
 from tkinter import simpledialog, messagebox
 import threading
 import apple_music as apple_music_service
-from utils import get_config, save_config
+from utils import get_config, save_config, locate_config
 
 config = get_config()
 CLIENT_ID = config.get("client_id") or "952320054870020146"
@@ -85,6 +85,7 @@ def thread_func(secret):
 
 
 def main():
+    print(f"Your config file is located at: {locate_config()}")
     global config
 
     secret = SECRET
