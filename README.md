@@ -2,6 +2,10 @@
 
 RPCServ is a server and client designed to allow applications/services to send rich presence to the client from anywhere in the world by making a simple HTTP request.
 
+It was made for use in a mobile Apple Music Discord Rich Presence shortcut, but can be used for anything. :p
+
+Also BIG CREDITS to [BennoCrafter](https://github.com/BennoCrafter) who also worked on this project!
+
 ## Client Instructions
 
 ### Installation
@@ -86,7 +90,7 @@ Example:
 #### Request Parameters List
 
 List of parameters that can be sent in an RPC request.
- 
+
 ```javascript
 {
     "clear": boolean, // If true, clears the rich presence, ignoring all other parameters
