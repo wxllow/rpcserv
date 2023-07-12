@@ -13,7 +13,7 @@ from utils import get_config, save_config, locate_config
 
 config = get_config()
 CLIENT_ID = config.get("client_id") or "952320054870020146"
-SERVER = config.get("server") or "http://144.202.34.12:8237/"
+SERVER = config.get("server") or "https://rpcserv.wxllow.dev"
 SECRET = config.get("secret")
 
 loop = asyncio.get_event_loop()
