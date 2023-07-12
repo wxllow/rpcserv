@@ -150,8 +150,6 @@ def status_update():
     details = data.get("details")
     state = data.get("state")
 
-    print(data.get("secret"))
-
     if not secret:
         print("ERROR: Missing body parameters")
         return jsonify({"error": "Missing body parameters"}), 400
