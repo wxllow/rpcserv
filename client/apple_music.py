@@ -19,7 +19,7 @@ def parse_time(time: str) -> int:
         minutes, seconds = time.split(":")
         return int(minutes) * 60 + int(seconds)
 
-    return int(time)
+    return float(time)
 
 
 async def get_apple_music_info(title, artist, album, limit=5):
