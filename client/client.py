@@ -84,6 +84,14 @@ def thread_func(secret):
     loop.run_until_complete(thread_async(secret))
 
 
+def reset_config():
+    # Reset config
+    config = {}
+    save_config(config)
+    print("Config reset, restarting...")
+    os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
+
+
 def main():
     print(f"Your config file is located at: {locate_config()}")
     global config
@@ -115,7 +123,11 @@ def main():
         "RPC",
         image,
         "RPC",
-        menu=pystray.Menu(pystray.MenuItem("Quit", lambda: tray.stop())),
+        menu=pystray.Menu(
+            pystray.MenuItem("Reset Config", reset_config),
+            pystray.Menu.SEPARATOR,
+            pystray.MenuItem("Quit", lambda: tray.stop()),
+        ),
     )
 
     # Run async a_main function in a seperate thread
