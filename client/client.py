@@ -135,6 +135,7 @@ if __name__ == "__main__":
 
             gi.require_version("AppIndicator3", "0.1")
         except (ImportError, ValueError) as e:
+            print(f"Error: {e}")
             messagebox.showerror(
                 title="Error",
                 message="AppIndicator is not installed. Please install python-pygobject and libappindicator-gtk3. (Package names may be different, these are for Arch!)",
