@@ -42,13 +42,14 @@ async def get_apple_music_info(title, artist, album, limit=5):
                     "image": None,
                 }
 
-            # Find the first result that matches the artist and album exactly, otherwise, just return the first result
+            # Find the first result that matches the artist, album, & title exactly, otherwise, just return the first result
             result = data["results"][0]
 
             for res in data["results"]:
                 if res["artistName"].lower() == artist.lower():
                     if res["collectionName"].lower() == album.lower():
-                        result = res
+                        if res["trackName"].lower() == title.lower():
+                            result = res
 
             return {
                 "url": result["trackViewUrl"],
