@@ -22,7 +22,7 @@ def parse_time(time: str) -> int:
     return int(time)
 
 
-async def get_apple_music_info(title, artist, album):
+async def get_apple_music_info(title, artist, album, limit=5):
     def encode_uri(text):
         return requests.utils.quote(text, safe="")
 
@@ -30,18 +30,27 @@ async def get_apple_music_info(title, artist, album):
 
     async with aiohttp.ClientSession() as session:
         async with await session.get(
-            f"https://itunes.apple.com/search?term={req_param}&entity=musicTrack&limit=1",
+            f"https://itunes.apple.com/search?term={req_param}&entity=musicTrack&limit={encode_uri(str(limit))}",
         ) as response:
             if response.status == 200:
                 # For some reason, itunes returns mimetype as javascript, but its still valid JSON
                 data = await response.json(content_type=None)
 
+            if data["resultCount"] < 1:
+                return
+
+            # Find the first result that matches the artist and album exactly, otherwise, just return the first result
+            result = data["results"][0]
+
+            for res in data["results"]:
+                if res["artistName"].lower() == artist.lower():
+                    if res["collectionName"].lower() == album.lower():
+                        result = res
+
             if data["resultCount"] > 0:
                 return {
-                    "url": data["results"][0]["trackViewUrl"],
-                    "image": data["results"][0]["artworkUrl100"].replace(
-                        "100x100bb", "512x512bb"
-                    ),
+                    "url": result["trackViewUrl"],
+                    "image": result["artworkUrl100"].replace("100x100bb", "512x512bb"),
                 }
 
     return {
