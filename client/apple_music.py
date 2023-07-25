@@ -32,9 +32,15 @@ async def get_apple_music_info(title, artist, album, limit=5):
         async with await session.get(
             f"https://itunes.apple.com/search?term={req_param}&entity=musicTrack&limit={encode_uri(str(limit))}",
         ) as response:
-            if response.status == 200:
-                # For some reason, itunes returns mimetype as javascript, but its still valid JSON
-                data = await response.json(content_type=None)
+            if response.status != 200:
+                print(f"Error getting iTunes info: {response.status} {response.reason}")
+                return {
+                    "url": None,
+                    "image": None,
+                }
+
+            # For some reason, itunes returns mimetype as javascript, but its still valid JSON
+            data = await response.json(content_type=None)
 
             if data["resultCount"] < 1:
                 return {
