@@ -37,7 +37,10 @@ async def get_apple_music_info(title, artist, album, limit=5):
                 data = await response.json(content_type=None)
 
             if data["resultCount"] < 1:
-                return
+                return {
+                    "url": None,
+                    "image": None,
+                }
 
             # Find the first result that matches the artist and album exactly, otherwise, just return the first result
             result = data["results"][0]
@@ -47,16 +50,10 @@ async def get_apple_music_info(title, artist, album, limit=5):
                     if res["collectionName"].lower() == album.lower():
                         result = res
 
-            if data["resultCount"] > 0:
-                return {
-                    "url": result["trackViewUrl"],
-                    "image": result["artworkUrl100"].replace("100x100bb", "512x512bb"),
-                }
-
-    return {
-        "url": None,
-        "image": None,
-    }
+            return {
+                "url": result["trackViewUrl"],
+                "image": result["artworkUrl100"].replace("100x100bb", "512x512bb"),
+            }
 
 
 async def rpcserv(data):
