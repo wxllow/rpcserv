@@ -12,7 +12,7 @@ flask = "^2.3.2"
 flask-socketio = "^5.3.4"
 eventlet = "^0.33.3"
 pymongo = "^4.4.0"
-gevent = "^22.10.2"
+gevent = "^23.9.1"
 flask-limiter = {extras = ["mongodb"], version = "^3.3.1"}
 python-dotenv = "^1.0.0"
 requests = "^2.31.0"
