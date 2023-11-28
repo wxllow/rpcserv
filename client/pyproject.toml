@@ -11,7 +11,7 @@ python = "^3.9"
 pypresence = "^4.2.1"
 python-socketio = "^5.8.0"
 requests = "^2.31.0"
-aiohttp = "^3.8.6"
+aiohttp = "^3.9.0"
 pystray = "^0.19.4"
 pillow = "10.0.1"
 pygobject = {version = "^3.44.1", platform = "Linux"}
