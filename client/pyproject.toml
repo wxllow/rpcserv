@@ -13,7 +13,7 @@ python-socketio = "^5.8.0"
 requests = "^2.31.0"
 aiohttp = "^3.8.6"
 pystray = "^0.19.4"
-pillow = "10.0.1"
+pillow = "10.2.0"
 pygobject = {version = "^3.44.1", platform = "Linux"}
 
 [tool.poetry.group.dev.dependencies]
